@@ -1,0 +1,7 @@
+## Interface: 80100
+## Title: Minesweeper XP
+## Author: Notviable-Tarren Mill
+## Notes: Classic Minesweeper game based on the Windows XP edition.
+## Version: 0.1
+
+MinesweeperXP.lua
