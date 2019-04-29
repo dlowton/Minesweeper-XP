@@ -4,4 +4,4 @@
 ## Notes: Classic Minesweeper game based on the Windows XP edition.
 ## Version: 0.1
 
-MinesweeperXP.lua
+MinesweeperXP2.lua
