@@ -10,7 +10,7 @@ local gridSize = 81;
 local totalSeconds = 0;
 local timer;
 local markedBombs = 0;
-local artPath = "Interface\\AddOns\\MinesweeperXP\\Art\\";
+local artPath = "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\";
 local firstClick = true;
 local noOfRows = 0;
 local noOfCols = 0;
@@ -205,76 +205,78 @@ end
 --Create array of tile texture numbers and entry status
 --entryStatus[i][j] = {Bomb?(0/1),Number?(0-8),Unhide?(0/1),Visited?(0/1)}
 for x=0,noOfCols-1 do
-  entryStatus[x] = {};
   for y=0,noOfRows-1 do
-    entryStatus[x][y] = {0,0,0,0}
+    local index4 = y + (x*noOfCols)
+    entryStatus[index4] = {0,0,0,0}
   end
 end
 
 function updateStatus()
   for x=0,noOfCols-1 do
     for y=0,noOfRows-1 do
-      local index = (y) + ((x)*noOfCols)
-      if main_frame["tileTexture"..index]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
-        entryStatus[x][y][1] = 1;
-        entryStatus[x][y][2] = 0;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
-      elseif main_frame["tileTexture"..index]:GetTexture() == artPath.."oneblock" then
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 1;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
-      elseif main_frame["tileTexture"..index]:GetTexture() == artPath.."twoblock" then
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 2;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
-      elseif main_frame["tileTexture"..index]:GetTexture() == artPath.."threeblock" then
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 3;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
-      elseif main_frame["tileTexture"..index]:GetTexture() == artPath.."fourblock" then
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 4;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
-      elseif main_frame["tileTexture"..index]:GetTexture() == artPath.."fiveblock" then
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 5;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
-      elseif main_frame["tileTexture"..index]:GetTexture() == artPath.."sixblock" then
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 6;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
-      elseif main_frame["tileTexture"..index]:GetTexture() == artPath.."sevenblock" then
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 7;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
-      elseif main_frame["tileTexture"..index]:GetTexture() == artPath.."eightblock" then
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 8;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
+      local index3 = (y) + ((x)*noOfCols)
+      if main_frame["tileTexture"..index3]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
+        entryStatus[index3][1] = 1;
+        entryStatus[index3][2] = 0;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      elseif main_frame["tileTexture"..index3]:GetTexture() == artPath.."1block" then
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 1;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      elseif main_frame["tileTexture"..index3]:GetTexture() == artPath.."2block" then
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 2;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      elseif main_frame["tileTexture"..index3]:GetTexture() == artPath.."3block" then
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 3;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      elseif main_frame["tileTexture"..index3]:GetTexture() == artPath.."4block" then
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 4;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      elseif main_frame["tileTexture"..index3]:GetTexture() == artPath.."5block" then
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 5;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      elseif main_frame["tileTexture"..index3]:GetTexture() == artPath.."6block" then
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 6;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      elseif main_frame["tileTexture"..index3]:GetTexture() == artPath.."7block" then
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 7;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      elseif main_frame["tileTexture"..index3]:GetTexture() == artPath.."8block" then
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 8;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
       else
-        entryStatus[x][y][1] = 0;
-        entryStatus[x][y][2] = 0;
-        entryStatus[x][y][3] = 0;
-        entryStatus[x][y][4] = 0;
+        entryStatus[index3][1] = 0;
+        entryStatus[index3][2] = 0;
+        entryStatus[index3][3] = 0;
+        entryStatus[index3][4] = 0;
+      end
     end
   end
 end
 
+
 function showSquares()
   for x=0,noOfCols-1 do
     for y=0,noOfRows-1 do
-      local index = (y) + ((x)*noOfCols)
-      if entryStatus[x][y][3] == 1 and entryStatus[x][y][1] == 0 then 
-        main_frame["tileButton"..index]:Hide(); 
+      local index2 = (y) + ((x)*noOfCols)
+      if entryStatus[index2][3] == 1 and entryStatus[index][1] == 0 then 
+        main_frame["tileButton"..index2]:Hide(); 
       end
     end
   end
@@ -310,7 +312,7 @@ function genNumberBlocks()
       local surroundingBombs = 0;
       index = (y) + ((x)*noOfCols)
 
-      --If the tile we're on is a bomb.
+      --If the tile we're on is not a bomb.
       if main_frame["tileTexture"..index]:GetTexture() ~= "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
         
         --Check topleft
@@ -386,6 +388,7 @@ function genNumberBlocks()
       end
     end
   end
+  updateStatus();
 end
 
 --Create reset button, 24x24px
@@ -397,6 +400,9 @@ main_frame.resetButton:GetNormalTexture():SetTexCoord(0,24/32,0,24/32);
 main_frame.resetButton:SetPushedTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\happyface_pushed.blp");
 main_frame.resetButton:GetPushedTexture():SetTexCoord(0,24/32,0,24/32);
 main_frame.resetButton:SetScript("OnClick", function(self) 
+  main_frame.timerCountTex1:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
+  main_frame.timerCountTex2:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
+  main_frame.timerCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
   firstClick = true;
   --Show all tile buttons again
   for i=0,gridSize-1 do
@@ -405,24 +411,36 @@ main_frame.resetButton:SetScript("OnClick", function(self)
     end
     --Reset the grid.
     main_frame["tileTexture"..i]:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\plainblock_pushed.blp");
-    --Do resetting of timer here etc.
   end
+
+  totalSeconds = 0;
+    if timer ~= nil then timer:Cancel(); end
+    timer = C_Timer.NewTicker(1,function() 
+        if totalSeconds < 999 then
+            totalSeconds = totalSeconds + 1;
+            main_frame.timerCountTex1:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor((totalSeconds/100)%10).."Number.blp");
+            main_frame.timerCountTex2:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor((totalSeconds/10)%10).."Number.blp");
+            main_frame.timerCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor(totalSeconds%10).."Number.blp");
+        end
+    end);
 
 
 end);
 
 function floodfillStack(x,y)
   stack = Stack:Create();
+  local ffindex = y + (x*noOfCols);
   --If user hit a bomb
-  if entryStatus[x][y][1] == 1 then
+  if entryStatus[ffindex][1] == 1 then
     return;
   --If a number block is clicked.
-  elseif entryStatus[x][y][2] > 0 then
+  elseif entryStatus[ffindex][2] > 0 then
+    entryStatus[ffindex][3] = 1; --unhide the block
     return;
   --Do the regular floodfill
   else
     --Set visited to 1/true
-    entryStatus[x][y][3] = 1;
+    entryStatus[ffindex][3] = 1;
     --Push the location onto the stack.
     stack:push({x,y});
 
@@ -434,12 +452,13 @@ function floodfillStack(x,y)
 
       --Check left.
       if tx - 1 >= 0 then
+        local tindex = ty + ((tx-1)*noOfCols)
         --If the square to the left is not a bomb and we havent visited
-        if entryStatus[tx-1][ty][1] == 0 and entryStatus[tx-1][ty][4] ~= 1 then
-          entryStatus[tx-1][ty][3] = 1; --unhide the block
-          entryStatus[tx-1][ty][4] = 1; --we've visited.
+        if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
+          entryStatus[tindex][3] = 1; --unhide the block
+          entryStatus[tindex][4] = 1; --we've visited.
           --If the square to the left is a lone block, push.
-          if entryStatus[tx-1][ty][2] == 0 then
+          if entryStatus[tindex][2] == 0 then
             stack:push({tx-1,ty});
           end
         end
@@ -447,12 +466,13 @@ function floodfillStack(x,y)
       
       --Check topleft
       if tx - 1 >= 0 and ty - 1 >=0 then
+        local tindex = (ty-1) + ((tx-1)*noOfCols)
         --If the square to the topleft is not a bomb and we havent visited
-        if entryStatus[tx-1][ty-1][1] == 0 and entryStatus[tx-1][ty-1][4] ~= 1 then
-          entryStatus[tx-1][ty-1][3] = 1; --unhide the block
-          entryStatus[tx-1][ty-1][4] = 1; --we've visited.
+        if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
+          entryStatus[tindex][3] = 1; --unhide the block
+          entryStatus[tindex][4] = 1; --we've visited.
           --If the square to the topleft is a lone block, push.
-          if entryStatus[tx-1][ty-1][2] == 0 then
+          if entryStatus[tindex][2] == 0 then
             stack:push({tx-1,ty-1});
           end
         end
@@ -460,12 +480,13 @@ function floodfillStack(x,y)
 
       --Check right.
       if tx + 1 <= 8 then
+        local tindex = ty + ((tx+1)*noOfCols)
         --If the square to the right is not a bomb and we havent visited
-        if entryStatus[tx+1][ty][1] == 0 and entryStatus[tx+1][ty][4] ~= 1 then
-          entryStatus[tx+1][ty][3] = 1; --unhide the block
-          entryStatus[tx+1][ty][4] = 1; --we've visited.
+        if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
+          entryStatus[tindex][3] = 1; --unhide the block
+          entryStatus[tindex][4] = 1; --we've visited.
           --If the square to the right is a lone block, push.
-          if entryStatus[tx+1][ty][2] == 0 then
+          if entryStatus[tindex][2] == 0 then
             stack:push({tx+1,ty});
           end
         end
@@ -473,12 +494,13 @@ function floodfillStack(x,y)
 
       --Check topright
       if tx + 1 <= 8 and ty - 1 >=0 then
+        local tindex = (ty-1) + ((tx+1)*noOfCols)
         --If the square to the topright is not a bomb and we havent visited
-        if entryStatus[tx+1][ty-1][1] == 0 and entryStatus[tx+1][ty-1][4] ~= 1 then
-          entryStatus[tx+1][ty-1][3] = 1; --unhide the block
-          entryStatus[tx+1][ty-1][4] = 1; --we've visited.
+        if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
+          entryStatus[tindex][3] = 1; --unhide the block
+          entryStatus[tindex][4] = 1; --we've visited.
           --If the square to the topright is a lone block, push.
-          if entryStatus[tx+1][ty-1][2] == 0 then
+          if entryStatus[tindex][2] == 0 then
             stack:push({tx+1,ty-1});
           end
         end
@@ -486,12 +508,13 @@ function floodfillStack(x,y)
 
       --Check bottomright
       if tx + 1 <= 8 and ty + 1 <= 0 then
+        local tindex = (ty+1) + ((tx+1)*noOfCols)
         --If the square to the bottomright is not a bomb and we havent visited
-        if entryStatus[tx+1][ty+1][1] == 0 and entryStatus[tx+1][ty+1][4] ~= 1 then
-          entryStatus[tx+1][ty+1][3] = 1; --unhide the block
-          entryStatus[tx+1][ty+1][4] = 1; --we've visited.
+        if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
+          entryStatus[tindex][3] = 1; --unhide the block
+          entryStatus[tindex][4] = 1; --we've visited.
           --If the square to the bottomright is a lone block, push.
-          if entryStatus[tx+1][ty+1][2] == 0 then
+          if entryStatus[tindex][2] == 0 then
             stack:push({tx+1,ty+1});
           end
         end
@@ -499,12 +522,13 @@ function floodfillStack(x,y)
 
       --Check up.
       if ty - 1 >= 0 then
+        local tindex = (ty-1) + (tx*noOfCols)
         --If the square to the up is not a bomb and we havent visited
-        if entryStatus[tx][ty-1][1] == 0 and entryStatus[tx][ty-1][4] ~= 1 then
-          entryStatus[tx][ty-1][3] = 1; --unhide the block
-          entryStatus[tx][ty-1][4] = 1; --we've visited.
+        if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
+          entryStatus[tindex][3] = 1; --unhide the block
+          entryStatus[tindex][4] = 1; --we've visited.
           --If the square to the up is a lone block, push.
-          if entryStatus[tx][ty-1][2] == 0 then
+          if entryStatus[tindex][2] == 0 then
             stack:push({tx,ty-1});
           end
         end
@@ -512,12 +536,13 @@ function floodfillStack(x,y)
 
       --Check down.
       if ty + 1 <= 8 then
+        local tindex = (ty+1) + (tx*noOfCols)
         --If the square to the up is not a bomb and we havent visited
-        if entryStatus[tx][ty+1][1] == 0 and entryStatus[tx][ty+1][4] ~= 1 then
-          entryStatus[tx][ty+1][3] = 1; --unhide the block
-          entryStatus[tx][ty+1][4] = 1; --we've visited.
+        if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
+          entryStatus[tindex][3] = 1; --unhide the block
+          entryStatus[tindex][4] = 1; --we've visited.
           --If the square to the up is a lone block, push.
-          if entryStatus[tx][ty+1][2] == 0 then
+          if entryStatus[tindex][2] == 0 then
             stack:push({tx,ty+1});
           end
         end
@@ -556,12 +581,14 @@ for x=0,noOfCols-1 do
         main_frame["tileButton"..index]:SetScript("OnClick", function(self, button)
           --If a standard left click.
           if button == "LeftButton" then
+
             --Check for first click
             --Generate bombs and number blocks.
             if firstClick == true then
               genBombs(noOfBombs, index);
               genNumberBlocks();
             end
+
             firstClick = false; --Set first click back to false.
 
             --If user hits a bomb.
@@ -569,26 +596,32 @@ for x=0,noOfCols-1 do
               --Set the corresponding texture tile to bomb hit.
               main_frame["tileTexture"..index]:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_hit.blp")
               for i=0,gridSize-1 do
+
                 --If user incorrectly flagged a block as a bomb
                 if main_frame["tileButton"..i]:IsShown() == true 
                 and main_frame["tileButton"..i]:GetNormalTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\flaggedblock"  
                 and main_frame["tileTexture"..i]:GetTexture() ~= "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
                     main_frame["tileTexture"..i]:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_cross.blp");
                 end
+
                 main_frame["tileButton"..i]:Hide();
               end
+
             --If user didn't hit a bomb, floodfill algorithm.
             else
               --Call the floodfill with x,y coords.
+              updateStatus();
               floodfillStack(x,y);
               showSquares();
             end
+
           elseif button == "RightButton" then
             main_frame["tileButton"..index]:SetNormalTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\flaggedblock.blp");
           end
+
         end);
 
-      end
+      
 
     end
 end
@@ -601,6 +634,11 @@ SLASH_MS1 = '/minesweeper';
 SLASH_MS2 = '/msxp';
 function SlashCmdList.MS(msg, editbox)
     if main_frame:IsShown() == true then
+        main_frame.timerCountTex1:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
+        main_frame.timerCountTex2:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
+        main_frame.timerCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
+        if timer ~= nil then timer:Cancel(); end
+        totalSeconds = 0;
         main_frame:Hide();
     else
         main_frame:Show();
@@ -612,5 +650,20 @@ function SlashCmdList.MS(msg, editbox)
         for i=0,gridSize-1 do
             main_frame["tileTexture"..i]:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\plainblock_pushed.blp");
         end
+
+        --Reset timer.
+        main_frame.timerCountTex1:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
+        main_frame.timerCountTex2:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
+        main_frame.timerCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
+        totalSeconds = 0;
+        if timer ~= nil then timer:Cancel(); end
+        timer = C_Timer.NewTicker(1,function() 
+            if totalSeconds < 999 then
+                totalSeconds = totalSeconds + 1;
+                main_frame.timerCountTex1:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor((totalSeconds/100)%10).."Number.blp");
+                main_frame.timerCountTex2:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor((totalSeconds/10)%10).."Number.blp");
+                main_frame.timerCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor(totalSeconds%10).."Number.blp");
+            end
+        end);
     end
 end
