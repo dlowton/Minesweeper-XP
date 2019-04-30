@@ -269,6 +269,17 @@ function updateStatus()
   end
 end
 
+function showSquares()
+  for x=0,noOfCols-1 do
+    for y=0,noOfRows-1 do
+      local index = (y) + ((x)*noOfCols)
+      if entryStatus[x][y][3] == 1 and entryStatus[x][y][1] == 0 then 
+        main_frame["tileButton"..index]:Hide(); 
+      end
+    end
+  end
+end
+
 --Generate bombs
 function genBombs(noOfBombs, clickedPos)
   local position = 0;
@@ -417,6 +428,103 @@ function floodfillStack(x,y)
 
     --Do the floodfill whilst the stack isnt empty.
     while stack:getn() ~= 0 do
+      --Pop the first item off.
+      local temp = stack:pop(1);
+      local tx,ty = temp[1],temp[2]; --Temporary x,y coords.
+
+      --Check left.
+      if tx - 1 >= 0 then
+        --If the square to the left is not a bomb and we havent visited
+        if entryStatus[tx-1][ty][1] == 0 and entryStatus[tx-1][ty][4] ~= 1 then
+          entryStatus[tx-1][ty][3] = 1; --unhide the block
+          entryStatus[tx-1][ty][4] = 1; --we've visited.
+          --If the square to the left is a lone block, push.
+          if entryStatus[tx-1][ty][2] == 0 then
+            stack:push({tx-1,ty});
+          end
+        end
+      end
+      
+      --Check topleft
+      if tx - 1 >= 0 and ty - 1 >=0 then
+        --If the square to the topleft is not a bomb and we havent visited
+        if entryStatus[tx-1][ty-1][1] == 0 and entryStatus[tx-1][ty-1][4] ~= 1 then
+          entryStatus[tx-1][ty-1][3] = 1; --unhide the block
+          entryStatus[tx-1][ty-1][4] = 1; --we've visited.
+          --If the square to the topleft is a lone block, push.
+          if entryStatus[tx-1][ty-1][2] == 0 then
+            stack:push({tx-1,ty-1});
+          end
+        end
+      end
+
+      --Check right.
+      if tx + 1 <= 8 then
+        --If the square to the right is not a bomb and we havent visited
+        if entryStatus[tx+1][ty][1] == 0 and entryStatus[tx+1][ty][4] ~= 1 then
+          entryStatus[tx+1][ty][3] = 1; --unhide the block
+          entryStatus[tx+1][ty][4] = 1; --we've visited.
+          --If the square to the right is a lone block, push.
+          if entryStatus[tx+1][ty][2] == 0 then
+            stack:push({tx+1,ty});
+          end
+        end
+      end
+
+      --Check topright
+      if tx + 1 <= 8 and ty - 1 >=0 then
+        --If the square to the topright is not a bomb and we havent visited
+        if entryStatus[tx+1][ty-1][1] == 0 and entryStatus[tx+1][ty-1][4] ~= 1 then
+          entryStatus[tx+1][ty-1][3] = 1; --unhide the block
+          entryStatus[tx+1][ty-1][4] = 1; --we've visited.
+          --If the square to the topright is a lone block, push.
+          if entryStatus[tx+1][ty-1][2] == 0 then
+            stack:push({tx+1,ty-1});
+          end
+        end
+      end
+
+      --Check bottomright
+      if tx + 1 <= 8 and ty + 1 <= 0 then
+        --If the square to the bottomright is not a bomb and we havent visited
+        if entryStatus[tx+1][ty+1][1] == 0 and entryStatus[tx+1][ty+1][4] ~= 1 then
+          entryStatus[tx+1][ty+1][3] = 1; --unhide the block
+          entryStatus[tx+1][ty+1][4] = 1; --we've visited.
+          --If the square to the bottomright is a lone block, push.
+          if entryStatus[tx+1][ty+1][2] == 0 then
+            stack:push({tx+1,ty+1});
+          end
+        end
+      end
+
+      --Check up.
+      if ty - 1 >= 0 then
+        --If the square to the up is not a bomb and we havent visited
+        if entryStatus[tx][ty-1][1] == 0 and entryStatus[tx][ty-1][4] ~= 1 then
+          entryStatus[tx][ty-1][3] = 1; --unhide the block
+          entryStatus[tx][ty-1][4] = 1; --we've visited.
+          --If the square to the up is a lone block, push.
+          if entryStatus[tx][ty-1][2] == 0 then
+            stack:push({tx,ty-1});
+          end
+        end
+      end
+
+      --Check down.
+      if ty + 1 <= 8 then
+        --If the square to the up is not a bomb and we havent visited
+        if entryStatus[tx][ty+1][1] == 0 and entryStatus[tx][ty+1][4] ~= 1 then
+          entryStatus[tx][ty+1][3] = 1; --unhide the block
+          entryStatus[tx][ty+1][4] = 1; --we've visited.
+          --If the square to the up is a lone block, push.
+          if entryStatus[tx][ty+1][2] == 0 then
+            stack:push({tx,ty+1});
+          end
+        end
+      end
+
+
+
 
     end
   end
@@ -473,20 +581,19 @@ for x=0,noOfCols-1 do
             else
               --Call the floodfill with x,y coords.
               floodfillStack(x,y);
+              showSquares();
             end
-
-            for i=0,80 do
-              main_frame["tileButton"..i]:Hide();
-            end
-
-
+          elseif button == "RightButton" then
+            main_frame["tileButton"..index]:SetNormalTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\flaggedblock.blp");
           end
         end);
 
-
+      end
 
     end
 end
+
+
 
 
 --Create slash command
