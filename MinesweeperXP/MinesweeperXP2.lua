@@ -12,15 +12,15 @@ local timer;
 local markedBombs = 0;
 local artPath = "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\";
 local firstClick = true;
-local noOfRows = 0;
-local noOfCols = 0;
+local rows = 0;
+local cols = 0;
 local noOfBombs = 0;
 local entryStatus = {};
 
 --Setup for a grid size of 81.
 if gridSize == 81 then
-    noOfCols = math.sqrt(gridSize);
-    noOfRows = math.sqrt(gridSize);
+    cols = math.sqrt(gridSize);
+    rows = math.sqrt(gridSize);
     noOfBombs = 10;
 end
 
@@ -184,7 +184,7 @@ main_frame.timerCountTex3:SetTexCoord(0,13/32,0,23/32);
 
 
 --Create tile buttons & underlying textures
-for i=0,gridSize-1 do 
+for i=1,gridSize do 
     --Buttons
 	  main_frame["tileButton"..i] = CreateFrame("BUTTON","tilebutton"..i,main_frame);
 	  main_frame["tileButton"..i]:SetSize(16,16);
@@ -204,17 +204,17 @@ end
 
 --Create array of tile texture numbers and entry status
 --entryStatus[i][j] = {Bomb?(0/1),Number?(0-8),Unhide?(0/1),Visited?(0/1)}
-for x=0,noOfCols-1 do
-  for y=0,noOfRows-1 do
-    local index4 = y + (x*noOfCols)
+for x=1,rows do
+  for y=1,cols do
+    local index4 = ((x-1)*rows)+y
     entryStatus[index4] = {0,0,0,0}
   end
 end
 
 function updateStatus()
-  for x=0,noOfCols-1 do
-    for y=0,noOfRows-1 do
-      local index3 = (y) + ((x)*noOfCols)
+  for x=1,rows do
+    for y=1,cols do
+      local index3 = ((x-1)*rows)+y
       if main_frame["tileTexture"..index3]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
         entryStatus[index3][1] = 1;
         entryStatus[index3][2] = 0;
@@ -272,9 +272,9 @@ end
 
 
 function showSquares()
-  for x=0,noOfCols-1 do
-    for y=0,noOfRows-1 do
-      local index2 = (y) + ((x)*noOfCols)
+  for x=1,rows do
+    for y=1,cols do
+      local index2 = ((x-1)*rows)+y
       if entryStatus[index2][3] == 1 and entryStatus[index][1] == 0 then 
         main_frame["tileButton"..index2]:Hide(); 
       end
@@ -290,7 +290,7 @@ function genBombs(noOfBombs, clickedPos)
 
   --Loop until all bombs are placed.
   while done == false do
-    position = math.random(0,80);
+    position = math.random(1,gridSize);
     --Check if a position already has a bomb on it.
     if main_frame["tileTexture"..position]:GetTexture() ~= "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown.blp" and position ~= clickedPos then
       main_frame["tileTexture"..position]:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown.blp");
@@ -307,73 +307,73 @@ end
 --Generate numerical tiles
 function genNumberBlocks()
   --Iterate over as a 2D array
-  for x=0,noOfCols-1 do
-    for y=0,noOfRows-1 do
+  for x=1,rows do
+    for y=1,cols do
       local surroundingBombs = 0;
-      index = (y) + ((x)*noOfCols)
+      index = ((x-1)*rows)+y
 
       --If the tile we're on is not a bomb.
       if main_frame["tileTexture"..index]:GetTexture() ~= "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
         
         --Check topleft
-        if x - 1 >= 0 and y - 1 >= 0 then
-          localindex = (y-1) + ((x-1)*noOfCols)
+        if x - 1 >= 1 and y - 1 >= 1 then
+          localindex = = ((x-2)*rows)+(y-1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
         end
 
         --Check absolute left
-        if x - 1 >= 0 then
-          localindex = (y) + ((x-1)*noOfCols)
+        if x - 1 >= 1 then
+          localindex = = ((x-2)*rows)+y
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
         end
 
         --Check bottom left
-        if x - 1 >= 0 and y + 1 <= 8 then
-          localindex = (y+1) + ((x-1)*noOfCols)
+        if x - 1 >= 1 and y + 1 <= 9 then
+          localindex = = ((x-2)*rows)+(y+1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
         end
 
         --Check top right
-        if x + 1 <= 8 and y - 1 >= 0 then
-          localindex = (y-1) + ((x+1)*noOfCols)
+        if x + 1 <= 9 and y - 1 >= 1 then
+          localindex = = ((x)*rows)+(y-1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
         end
 
         --Check absolute right
-        if x + 1 <= 8 then
-          localindex = (y) + ((x+1)*noOfCols)
+        if x + 1 <= 9 then
+          localindex = = ((x)*rows)+y
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
         end
 
         --Check bottom right
-        if x + 1 <= 8 and y + 1 <= 8 then
-          localindex = (y+1) + ((x+1)*noOfCols)
+        if x + 1 <= 9 and y + 1 <= 9 then
+          localindex = = ((x)*rows)+(y+1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
         end
 
         --Check top
-        if y - 1 >= 0 then
-          localindex = (y-1) + ((x)*noOfCols)
+        if y - 1 >= 1 then
+          localindex = = ((x-1)*rows)+(y-1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
         end
 
         --Check bottom
-        if y + 1 <= 8 then
-          localindex = (y+1) + ((x)*noOfCols)
+        if y + 1 <= 9 then
+          localindex = = ((x-1)*rows)+(y+1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -405,7 +405,7 @@ main_frame.resetButton:SetScript("OnClick", function(self)
   main_frame.timerCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
   firstClick = true;
   --Show all tile buttons again
-  for i=0,gridSize-1 do
+  for i=1,gridSize do
     if main_frame["tileButton"..i]:IsShown() == false then
       main_frame["tileButton"..i]:Show();
     end
@@ -429,7 +429,7 @@ end);
 
 function floodfillStack(x,y)
   stack = Stack:Create();
-  local ffindex = y + (x*noOfCols);
+  local ffindex = = ((x-1)*rows)+y;
   --If user hit a bomb
   if entryStatus[ffindex][1] == 1 then
     return;
@@ -451,8 +451,8 @@ function floodfillStack(x,y)
       local tx,ty = temp[1],temp[2]; --Temporary x,y coords.
 
       --Check left.
-      if tx - 1 >= 0 then
-        local tindex = ty + ((tx-1)*noOfCols)
+      if tx - 1 >= 1 then
+        local tindex = = ((tx-2)*rows)+ty
         --If the square to the left is not a bomb and we havent visited
         if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
           entryStatus[tindex][3] = 1; --unhide the block
@@ -465,8 +465,8 @@ function floodfillStack(x,y)
       end
       
       --Check topleft
-      if tx - 1 >= 0 and ty - 1 >=0 then
-        local tindex = (ty-1) + ((tx-1)*noOfCols)
+      if tx - 1 >= 1 and ty - 1 >= 1 then
+        local tindex = ((tx-2)*rows)+(ty-1)
         --If the square to the topleft is not a bomb and we havent visited
         if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
           entryStatus[tindex][3] = 1; --unhide the block
@@ -479,8 +479,8 @@ function floodfillStack(x,y)
       end
 
       --Check right.
-      if tx + 1 <= 8 then
-        local tindex = ty + ((tx+1)*noOfCols)
+      if tx + 1 <= 9 then
+        local tindex = ((tx)*rows)+ty
         --If the square to the right is not a bomb and we havent visited
         if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
           entryStatus[tindex][3] = 1; --unhide the block
@@ -493,8 +493,8 @@ function floodfillStack(x,y)
       end
 
       --Check topright
-      if tx + 1 <= 8 and ty - 1 >=0 then
-        local tindex = (ty-1) + ((tx+1)*noOfCols)
+      if tx + 1 <= 9 and ty - 1 >= 1 then
+        local tindex = ((tx)*rows)+(ty-1)
         --If the square to the topright is not a bomb and we havent visited
         if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
           entryStatus[tindex][3] = 1; --unhide the block
@@ -507,8 +507,8 @@ function floodfillStack(x,y)
       end
 
       --Check bottomright
-      if tx + 1 <= 8 and ty + 1 <= 0 then
-        local tindex = (ty+1) + ((tx+1)*noOfCols)
+      if tx + 1 <= 9 and ty + 1 <= 9 then
+        local tindex = ((tx)*rows)+(ty+1)
         --If the square to the bottomright is not a bomb and we havent visited
         if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
           entryStatus[tindex][3] = 1; --unhide the block
@@ -521,8 +521,8 @@ function floodfillStack(x,y)
       end
 
       --Check up.
-      if ty - 1 >= 0 then
-        local tindex = (ty-1) + (tx*noOfCols)
+      if ty - 1 >= 1 then
+        local tindex = ((tx-1)*rows)+(ty-1)
         --If the square to the up is not a bomb and we havent visited
         if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
           entryStatus[tindex][3] = 1; --unhide the block
@@ -535,8 +535,8 @@ function floodfillStack(x,y)
       end
 
       --Check down.
-      if ty + 1 <= 8 then
-        local tindex = (ty+1) + (tx*noOfCols)
+      if ty + 1 <= 9 then
+        local tindex = ((tx-1)*rows)+(ty+1)
         --If the square to the up is not a bomb and we havent visited
         if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
           entryStatus[tindex][3] = 1; --unhide the block
@@ -557,22 +557,22 @@ function floodfillStack(x,y)
 end
 
 --Stitching algorithm and function setting
-for x=0,noOfCols-1 do
-    for y=0,noOfRows-1 do
+for x=1,rows do
+  for y=1,cols do
         --interate through 1D array as 2D array
-        local index = (y) + ((x)*noOfCols)
+        local index = ((x-1)*rows)+y
 
         --Attach first button and tile texture.
-        if index == 0 then
+        if index == 1 then
             main_frame["tileButton"..index]:SetPoint("TOPLEFT", main_frame,"TOPLEFT", 15,-96);
             main_frame["tileTexture"..index]:SetPoint("TOPLEFT", main_frame,"TOPLEFT", 15,-96);
             first = true;
         end
         --First tile of each new row
-        if x ~= 0 and y == 0 then
-            main_frame["tileButton"..index]:SetPoint("TOPLEFT", main_frame["tileButton"..(index-noOfRows)],"BOTTOMLEFT")
-            main_frame["tileTexture"..index]:SetPoint("TOPLEFT", main_frame["tileTexture"..(index-noOfRows)],"BOTTOMLEFT")
-        elseif index ~= 0 then
+        if x ~= 1 and y == 1 then
+            main_frame["tileButton"..index]:SetPoint("TOPLEFT", main_frame["tileButton"..(index-rows)],"BOTTOMLEFT")
+            main_frame["tileTexture"..index]:SetPoint("TOPLEFT", main_frame["tileTexture"..(index-rows)],"BOTTOMLEFT")
+        elseif index ~= 1 then
             main_frame["tileButton"..index]:SetPoint("TOPLEFT", main_frame["tileButton"..(index-1)],"TOPRIGHT")
             main_frame["tileTexture"..index]:SetPoint("TOPLEFT", main_frame["tileTexture"..(index-1)],"TOPRIGHT")
         end
@@ -595,7 +595,7 @@ for x=0,noOfCols-1 do
             if main_frame["tileTexture"..index]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
               --Set the corresponding texture tile to bomb hit.
               main_frame["tileTexture"..index]:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_hit.blp")
-              for i=0,gridSize-1 do
+              for i=1,gridSize do
 
                 --If user incorrectly flagged a block as a bomb
                 if main_frame["tileButton"..i]:IsShown() == true 
@@ -642,12 +642,12 @@ function SlashCmdList.MS(msg, editbox)
         main_frame:Hide();
     else
         main_frame:Show();
-        for i=0,gridSize-1 do
+        for i=1,gridSize do
             if main_frame["tileButton"..i]:IsShown() == false then
                 main_frame["tileButton"..i]:Show()
             end
         end
-        for i=0,gridSize-1 do
+        for i=1,gridSize do
             main_frame["tileTexture"..i]:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\plainblock_pushed.blp");
         end
 
