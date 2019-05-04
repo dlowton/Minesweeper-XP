@@ -15,6 +15,7 @@ local firstClick = true;
 local rows = 0;
 local cols = 0;
 local noOfBombs = 0;
+local fBlockCount = 0;
 local entryStatus = {};
 
 --Setup for a grid size of 81.
@@ -153,6 +154,13 @@ main_frame.bombCountTex3:SetPoint("TOPLEFT",main_frame.bombCountTex2,"TOPRIGHT",
 main_frame.bombCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
 main_frame.bombCountTex3:SetTexCoord(0,13/32,0,23/32);
 
+function updateBombCount()
+  local showNum = noOfBombs - fBlockCount;
+  main_frame.bombCountTex1:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor((showNum/100)%10).."Number.blp");
+  main_frame.bombCountTex2:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor((showNum/10)%10).."Number.blp");
+  main_frame.bombCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\"..floor(showNum%10).."Number.blp");
+end
+
 --set the bomb count text to '10'
 if gridSize == 81 then
     main_frame.bombCountTex2:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\1Number.blp");
@@ -186,7 +194,8 @@ main_frame.timerCountTex3:SetTexCoord(0,13/32,0,23/32);
 --Create tile buttons & underlying textures
 for i=1,gridSize do 
     --Buttons
-	  main_frame["tileButton"..i] = CreateFrame("BUTTON","tilebutton"..i,main_frame);
+    main_frame["tileButton"..i] = CreateFrame("BUTTON","tilebutton"..i,main_frame);
+    main_frame["tileButton"..i]:SetFrameStrata("HIGH");
 	  main_frame["tileButton"..i]:SetSize(16,16);
     main_frame["tileButton"..i]:SetNormalTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\plainblock.blp");
     main_frame["tileButton"..i]:GetNormalTexture():SetTexCoord(0,14/16,0,14/16);
@@ -317,7 +326,7 @@ function genNumberBlocks()
         
         --Check topleft
         if x - 1 >= 1 and y - 1 >= 1 then
-          localindex = = ((x-2)*rows)+(y-1)
+          localindex = ((x-2)*rows)+(y-1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -325,7 +334,7 @@ function genNumberBlocks()
 
         --Check absolute left
         if x - 1 >= 1 then
-          localindex = = ((x-2)*rows)+y
+          localindex = ((x-2)*rows)+y
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -333,7 +342,7 @@ function genNumberBlocks()
 
         --Check bottom left
         if x - 1 >= 1 and y + 1 <= 9 then
-          localindex = = ((x-2)*rows)+(y+1)
+          localindex = ((x-2)*rows)+(y+1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -341,7 +350,7 @@ function genNumberBlocks()
 
         --Check top right
         if x + 1 <= 9 and y - 1 >= 1 then
-          localindex = = ((x)*rows)+(y-1)
+          localindex = ((x)*rows)+(y-1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -349,7 +358,7 @@ function genNumberBlocks()
 
         --Check absolute right
         if x + 1 <= 9 then
-          localindex = = ((x)*rows)+y
+          localindex = ((x)*rows)+y
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -357,7 +366,7 @@ function genNumberBlocks()
 
         --Check bottom right
         if x + 1 <= 9 and y + 1 <= 9 then
-          localindex = = ((x)*rows)+(y+1)
+          localindex = ((x)*rows)+(y+1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -365,7 +374,7 @@ function genNumberBlocks()
 
         --Check top
         if y - 1 >= 1 then
-          localindex = = ((x-1)*rows)+(y-1)
+          localindex = ((x-1)*rows)+(y-1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -373,7 +382,7 @@ function genNumberBlocks()
 
         --Check bottom
         if y + 1 <= 9 then
-          localindex = = ((x-1)*rows)+(y+1)
+          localindex = ((x-1)*rows)+(y+1)
           if main_frame["tileTexture"..localindex]:GetTexture() == "Interface\\AddOns\\MinesweeperXP\\Art\\blp\\bomb_shown" then
             surroundingBombs = surroundingBombs + 1;
           end
@@ -404,11 +413,14 @@ main_frame.resetButton:SetScript("OnClick", function(self)
   main_frame.timerCountTex2:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
   main_frame.timerCountTex3:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\0Number.blp");
   firstClick = true;
+  fBlockCount = 0;
+  updateBombCount();
   --Show all tile buttons again
   for i=1,gridSize do
-    if main_frame["tileButton"..i]:IsShown() == false then
-      main_frame["tileButton"..i]:Show();
-    end
+    main_frame["tileButton"..i]:Show();
+    main_frame["tileButton"..i]:Hide();
+    main_frame["tileButton"..i]:Show();
+    main_frame["tileButton"..i]:SetNormalTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\plainblock.blp");
     --Reset the grid.
     main_frame["tileTexture"..i]:SetTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\plainblock_pushed.blp");
   end
@@ -429,7 +441,7 @@ end);
 
 function floodfillStack(x,y)
   stack = Stack:Create();
-  local ffindex = = ((x-1)*rows)+y;
+  local ffindex = ((x-1)*rows)+y;
   --If user hit a bomb
   if entryStatus[ffindex][1] == 1 then
     return;
@@ -452,7 +464,7 @@ function floodfillStack(x,y)
 
       --Check left.
       if tx - 1 >= 1 then
-        local tindex = = ((tx-2)*rows)+ty
+        local tindex = ((tx-2)*rows)+ty
         --If the square to the left is not a bomb and we havent visited
         if entryStatus[tindex][1] == 0 and entryStatus[tindex][4] ~= 1 then
           entryStatus[tindex][3] = 1; --unhide the block
@@ -556,6 +568,25 @@ function floodfillStack(x,y)
 
 end
 
+--Check whether game is over.
+function checkGameOver()
+  local shownBlocks = 0;
+  --Find the number of blocks shown
+  for i=1,gridSize do
+    if main_frame["tileButton"..i]:IsShown() == true then
+      shownBlocks = shownBlocks + 1;
+    end
+  end
+
+  if shownBlocks == fBlockCount then
+    --Game over functionality
+    timer:Cancel(); --stop the timer
+    --GET SHADES ICON
+  end
+
+
+end
+
 --Stitching algorithm and function setting
 for x=1,rows do
   for y=1,cols do
@@ -578,7 +609,7 @@ for x=1,rows do
         end
 
         --Script button
-        main_frame["tileButton"..index]:SetScript("OnClick", function(self, button)
+        main_frame["tileButton"..index]:SetScript("OnMouseDown", function(self, button)
           --If a standard left click.
           if button == "LeftButton" then
 
@@ -613,10 +644,23 @@ for x=1,rows do
               updateStatus();
               floodfillStack(x,y);
               showSquares();
+              checkGameOver();
             end
 
           elseif button == "RightButton" then
-            main_frame["tileButton"..index]:SetNormalTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\flaggedblock.blp");
+
+            --First check unflags the block
+            if main_frame["tileButton"..index]:GetNormalTexture():GetTexture() == artPath.."flaggedblock" then
+              main_frame["tileButton"..index]:SetNormalTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\plainblock.blp");
+              fBlockCount = fBlockCount - 1;
+              updateBombCount();
+            --Else flags the block
+            else
+              main_frame["tileButton"..index]:SetNormalTexture("Interface\\AddOns\\MinesweeperXP\\Art\\blp\\flaggedblock.blp");
+              --Increase flagged block count
+              fBlockCount = fBlockCount + 1;
+              updateBombCount();
+            end
           end
 
         end);
